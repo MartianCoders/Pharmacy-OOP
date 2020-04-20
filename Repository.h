@@ -41,13 +41,17 @@ public:
 	}
 
 	/* Save file*/
-	void saveFile() { // Save data
+	void saveFile() { // Save datax
 		if (this->fileName.size() > 0)
 		{
 			std::ofstream f(this->fileName);
+			
 			for (int i = 0; i < this->storage.size(); i++)
 			{
-				f << this->storage[i];
+				if (i == this->storage.size() - 1)
+					f << this->storage[i];
+				else
+					f << this->storage[i] << std::endl;
 			}
 			f.close();
 		}
@@ -60,6 +64,9 @@ public:
 
 	int getSize() {
 		return this->storage.size();
+	}
+	std::string getFile() {
+		return this->fileName;
 	}
 
 	std::vector<T> getAll() {

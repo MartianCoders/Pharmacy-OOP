@@ -29,10 +29,10 @@ public:
 				f >> ID >> name >> email >> grade;
 				if (name.empty() == false)
 				{
-					this->addElement(Employee(ID, name, email, grade));
+					Employee e(ID, name, email, grade);
+					this->addElement(e);
 				}
 			}
-
 			f.close();
 		}
 	}

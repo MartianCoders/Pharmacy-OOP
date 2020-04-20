@@ -22,13 +22,18 @@ public:
 			int ID;
 			std::string name;
 			std::string producer;
+			std::string boolean;
 			bool recipe;
 			int stock;
 			while (!f.eof())
 			{
-				f >> ID >> name >> recipe >> stock >> producer;
+				f >> ID >> name >> boolean >> stock >> producer;
 				if (name.empty() == false)
 				{
+					if (boolean == "true")
+						recipe = true;
+					else
+						recipe = false;
 					this->addElement(Drug(ID, name, recipe, stock, producer));
 				}
 			}
