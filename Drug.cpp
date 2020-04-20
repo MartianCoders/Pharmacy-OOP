@@ -86,6 +86,6 @@ bool Drug::operator!=(const Drug& d) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Drug& d) {
-	os << d.ID << ": " << d.name << ", recipe: " << std::boolalpha << d.recipe << ", " << d.stock << ", " << d.producer << '\n';
+	os << d.ID << " " << d.name << " " << std::boolalpha << d.recipe << " " << d.stock << " " << d.producer;
 	return os;
 }

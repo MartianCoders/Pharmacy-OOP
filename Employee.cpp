@@ -1,4 +1,7 @@
 #include "Objects.h"
+#include <cstddef>
+#include <iostream>
+
 
 Employee::Employee() {
 	this->ID = 0;
@@ -74,7 +77,9 @@ bool Employee::operator!=(const Employee& e) const {
 }
 
 std::ostream& operator<<(std::ostream& os, const Employee& e) {
-	os << e.ID << ": " << e.name << ", " << e.email << ", " << e.grade << '\n';
+	os << e.ID << " " << e.name << " " << e.email << " " << e.grade;
 	return os;
 }
+
+
 
