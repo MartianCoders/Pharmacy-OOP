@@ -36,7 +36,7 @@ public:
 	bool operator==(const Employee&) const;
 	bool operator!=(const Employee&) const;
 	friend std::ostream& operator<<(std::ostream&, const Employee&);
-
+	friend std::istream& operator>>(std::istream& is, Employee&);
 
 
 };

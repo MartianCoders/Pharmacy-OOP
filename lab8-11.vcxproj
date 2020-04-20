@@ -144,6 +144,7 @@
     <ClCompile Include="Drug.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="tests.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControllerDrug.h" />
@@ -153,9 +154,11 @@
     <ClInclude Include="RepositoryDrug.h" />
     <ClInclude Include="RepositoryEmployee.h" />
     <ClInclude Include="tests.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="drugs.txt" />
+    <Text Include="employee.txt" />
     <Text Include="tests.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

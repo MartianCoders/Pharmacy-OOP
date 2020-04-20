@@ -26,7 +26,7 @@ void test_employee() {
 	assert(e1 != e2 == false);
 	std::stringstream string;
 	string << e1;
-	assert(string.str() == "2: Andrei, andrei@gmail.com, 2\n");
+	assert(string.str() == "2 Andrei andrei@gmail.com 2");
 }
 
 void test_drug() {
@@ -46,7 +46,7 @@ void test_drug() {
 	assert(d1 != d2 == false);
 	std::stringstream string;
 	string << d1;
-	assert(string.str() == "2: Ospen, recipe: true, 25, Bayer\n");
+	assert(string.str() == "2 Ospen true 25 Bayer");
 }
 
 void test_repoDrug() {

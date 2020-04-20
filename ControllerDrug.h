@@ -18,4 +18,5 @@ public:
 	/* Get's */
 	std::vector<Drug> getAll();
 	int getSize();
+	std::string getFile();
 };

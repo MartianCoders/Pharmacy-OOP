@@ -18,4 +18,5 @@ public:
 	/* Get's */
 	std::vector<Employee> getAll();
 	int getSize();
+	std::string getFile();
 };
