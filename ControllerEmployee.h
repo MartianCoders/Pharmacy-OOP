@@ -19,4 +19,7 @@ public:
 	std::vector<Employee> getAll();
 	int getSize();
 	std::string getFile();
+
+	/* Operations */
+	bool changeGrade(int, int, int);
 };

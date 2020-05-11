@@ -41,3 +41,16 @@ std::vector<Employee> ControllerEmployee::getAll() {
 int ControllerEmployee::getSize() {
 	return this->storageEmployee.getSize();
 }
+
+bool ControllerEmployee::changeGrade(int ID, int newGrade, int userGrade) {
+	std::vector<Employee> employee = this->storageEmployee.getAll();
+
+	for (int i = 0; i < employee.size(); i++)
+		if (ID == employee[i].getID()) {
+			if (userGrade > employee[i].getGrade()) {
+				this->storageEmployee.updateElement(Employee(employee[i].getID(), employee[i].getName(), employee[i].getEmail(), newGrade));
+				return true;
+			}
+		}
+	return false;
+}
