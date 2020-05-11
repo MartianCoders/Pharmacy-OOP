@@ -72,4 +72,6 @@ public:
 	std::vector<T> getAll() {
 		return this->storage;
 	}
+
+	virtual void loadFile() = 0;
 };

@@ -36,6 +36,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Validator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tests.h">
@@ -62,10 +65,20 @@
     <ClInclude Include="UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MyExceptions.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Validator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="drugs.txt" />
     <Text Include="tests.txt" />
     <Text Include="employee.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="employee.csv" />
+    <None Include="drugs.csv" />
   </ItemGroup>
 </Project>

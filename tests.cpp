@@ -81,6 +81,11 @@ void test_contDrug() {
 	assert(controllerDrug.getAll()[0] == d1);
 	controllerDrug.update(1, "Nurofen", true, 25, "Ro");
 	assert(controllerDrug.getAll()[0] == d2);
+	
+	std::string drug = "nuro";
+	std::vector<Drug> result = controllerDrug.findDrug(drug);
+	for (int i = 0; i < result.size(); i++)
+		assert(result[i].getName() == "Nurofen");
 	controllerDrug.dell(1);
 	assert(controllerDrug.getSize() == 0);
 }
@@ -97,6 +102,8 @@ void test_contEmployee() {
 	assert(controllerEmployee.getAll()[0] == e1);
 	controllerEmployee.update(1, "Andrei", "andrei@gmail.com", 3);
 	assert(controllerEmployee.getAll()[0] == e2);
+	assert(controllerEmployee.changeGrade(1, 2, 6) == true);
+	assert(controllerEmployee.changeGrade(1, 6, 1) == false);
 	controllerEmployee.dell(1);
 	assert(controllerEmployee.getSize() == 0);
 }

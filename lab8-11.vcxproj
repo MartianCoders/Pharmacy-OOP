@@ -87,6 +87,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,21 +146,28 @@
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="tests.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Validator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ControllerDrug.h" />
     <ClInclude Include="ControllerEmployee.h" />
+    <ClInclude Include="MyExceptions.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Repository.h" />
     <ClInclude Include="RepositoryDrug.h" />
     <ClInclude Include="RepositoryEmployee.h" />
     <ClInclude Include="tests.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="Validator.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="drugs.txt" />
     <Text Include="employee.txt" />
     <Text Include="tests.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="drugs.csv" />
+    <None Include="employee.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
