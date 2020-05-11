@@ -1,6 +1,15 @@
 #include "UI.h"
+#include "RepositoryDrug.h"
+#include "RepositoryEmployee.h"
 #include "ControllerDrug.h"
 #include "ControllerEmployee.h"
+#include "Validator.h"
+#include "MyExceptions.h"
+
+#include <iostream>
+#include <algorithm>
+#include <string>
+#include <string.h>
 
 UI::UI() {}
 
@@ -17,6 +26,9 @@ void UI::showMenu() {
 	std::cout << "employee | Employee menu" << '\n';
 	std::cout << "drugs    | Drugs menu"<< '\n';
 	std::cout << "--------------------------" << '\n';
+	std::cout << "find     | Search for drugs {drug}" << '\n';
+	std::cout << "change   | Change employee grade {ID} {newGrade}" << '\n';
+	std::cout << "users    | Show all users" << '\n';
 }
 
 void UI::showEmployeeMenu() {
@@ -39,6 +51,49 @@ void UI::showDrugsMenu() {
 	std::cout << "--------------------------" << '\n';
 }
 
+void UI::loginPhase() {
+	std::cout << "============================" << '\n';
+	std::cout << "User: ";
+	std::string userToCheck;
+	std::getline(std::cin, userToCheck);
+	if (userToCheck != "exit") {
+		std::cout << "Password: ";
+		std::string passwordToCheck;
+		std::getline(std::cin, passwordToCheck);
+		std::cout << "============================";
+
+		if (this->checkData(userToCheck, passwordToCheck)) {
+			std::cout << '\n' << "Login successful!" << '\n' << '\n';
+			this->user = userToCheck;
+			this->menu();
+		}
+		else {
+			std::cout << '\n' << "Wrong data input!" << '\n';
+			this->loginPhase();
+		}
+	}
+}
+
+bool UI::checkData(std::string user, std::string pass) {
+	std::vector<Employee> storageEmployee = this->controllerEmployee.getAll();
+	std::string token;
+	std::string sep = "@";
+
+
+	for (int i = 0; i < storageEmployee.size(); i++)
+		if (storageEmployee[i].getEmail() == user) {
+			size_t pos = user.find(sep);
+			token = user.substr(0, pos);
+			user = token;
+			if (user == pass) {
+				this->userGrade = storageEmployee[i].getGrade();
+				this->usersStorage.push_back(storageEmployee[i]);
+				return true;
+			}
+		}
+	return false;
+}
+
 void UI::showAllE() {
 	std::vector<Employee> elements = this->controllerEmployee.getAll();
 
@@ -54,134 +109,121 @@ void UI::showAllD() {
 }
 
 void UI::addE(std::string cmd) {
+	std::vector<std::string> strings;
+
 	std::string token;
 	std::string sep = " ";
 	size_t pos = cmd.find(sep);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int ID = stoi(token);
+	for (int i = 0; i < 4; i++) {
+		cmd.erase(0, pos + sep.length());
+		pos = cmd.find(sep);
+		token = cmd.substr(0, pos);
+		strings.push_back(token);
+	}
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string name = token;
+	Validator val;
+	try {
+		val.employeeValidator(strings);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string email = token;
+		int ID = stoi(strings[0]);
+		int grade = stoi(strings[3]);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int grade = stoi(token);
-
-	this->controllerEmployee.add(ID, name, email, grade);
+		this->controllerEmployee.add(ID, strings[1], strings[2], grade);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
 }
 
 void UI::addD(std::string cmd) {
+	std::vector<std::string> strings;
+	bool recipe = false;
+
 	std::string token;
 	std::string sep = " ";
 	size_t pos = cmd.find(sep);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int ID = stoi(token);
+	for (int i = 0; i < 5; i++) {
+		cmd.erase(0, pos + sep.length());
+		pos = cmd.find(sep);
+		token = cmd.substr(0, pos);
+		strings.push_back(token);
+	}
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string name = token;
+	Validator val;
+	try {
+		val.drugsValidator(strings);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	bool recipe;
-	if (token == "true")
-		recipe = true;
-	else
-		recipe = false;
+		int ID = stoi(strings[0]);
+		if (strings[2] == "true")
+			recipe = true;
+		int stock = stoi(strings[3]);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int stock = stoi(token);
-
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string producer = token;
-
-	this->controllerDrugs.add(ID, name, recipe, stock, producer);
-
+		this->controllerDrugs.add(ID, strings[1], recipe, stock, strings[4]);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
 }
 
 void UI::updateE(std::string cmd) {
+	std::vector<std::string> strings;
+
 	std::string token;
 	std::string sep = " ";
 	size_t pos = cmd.find(sep);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int ID = stoi(token);
+	for (int i = 0; i < 4; i++) {
+		cmd.erase(0, pos + sep.length());
+		pos = cmd.find(sep);
+		token = cmd.substr(0, pos);
+		strings.push_back(token);
+	}
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string name = token;
+	Validator val;
+	try {
+		val.employeeValidator(strings);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string email = token;
+		int ID = stoi(strings[0]);
+		int grade = stoi(strings[3]);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int grade = stoi(token);
-
-	this->controllerEmployee.update(ID, name, email, grade);
+		this->controllerEmployee.update(ID, strings[1], strings[2], grade);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
 }
 
 void UI::updateD(std::string cmd) {
+	std::vector<std::string> strings;
+	bool recipe = false;
+
 	std::string token;
 	std::string sep = " ";
 	size_t pos = cmd.find(sep);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int ID = stoi(token);
+	for (int i = 0; i < 5; i++) {
+		cmd.erase(0, pos + sep.length());
+		pos = cmd.find(sep);
+		token = cmd.substr(0, pos);
+		strings.push_back(token);
+	}
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string name = token;
+	Validator val;
+	try {
+		val.drugsValidator(strings);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	bool recipe;
-	if (token == "true")
-		recipe = true;
-	else
-		recipe = false;
+		int ID = stoi(strings[0]);
+		if (strings[2] == "true")
+			recipe = true;
+		int stock = stoi(strings[3]);
 
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	int stock = stoi(token);
-
-	cmd.erase(0, pos + sep.length());
-	pos = cmd.find(sep);
-	token = cmd.substr(0, pos);
-	std::string producer = token;
-
-	this->controllerDrugs.update(ID, name, recipe, stock, producer);
+		this->controllerDrugs.update(ID, strings[1], recipe, stock, strings[4]);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
 }
 
 void UI::delE(std::string cmd) {
@@ -192,9 +234,17 @@ void UI::delE(std::string cmd) {
 	cmd.erase(0, pos + sep.length());
 	pos = cmd.find(sep);
 	token = cmd.substr(0, pos);
-	int ID = stoi(token);
+	
+	Validator val;
+	try {
+		val.deleteValidator(token);
 
-	this->controllerEmployee.dell(ID);
+		int ID = stoi(token);
+		this->controllerEmployee.dell(ID);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
 }
 
 void UI::delD(std::string cmd) {
@@ -205,9 +255,75 @@ void UI::delD(std::string cmd) {
 	cmd.erase(0, pos + sep.length());
 	pos = cmd.find(sep);
 	token = cmd.substr(0, pos);
-	int ID = stoi(token);
 
-	this->controllerDrugs.dell(ID);
+	Validator val;
+	try {
+		val.deleteValidator(token);
+
+		int ID = stoi(token);
+		this->controllerDrugs.dell(ID);
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
+}
+
+void UI::find(std::string cmd) {
+	std::string token;
+	std::string sep = " ";
+	size_t pos = cmd.find(sep);
+
+	cmd.erase(0, pos + sep.length());
+	pos = cmd.find(sep);
+	token = cmd.substr(0, pos);
+
+	Validator val;
+	try {
+		val.drugSearchValidator(token);
+
+		std::vector<Drug> result = this->controllerDrugs.findDrug(token);
+		for (int i = 0; i < result.size(); i++)
+			std::cout << result[i] << '\n';
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
+}
+
+void UI::change(std::string cmd) {
+	std::vector<std::string> strings;
+
+	std::string token;
+	std::string sep = " ";
+	size_t pos = cmd.find(sep);
+
+	for (int i = 0; i < 4; i++) {
+		cmd.erase(0, pos + sep.length());
+		pos = cmd.find(sep);
+		token = cmd.substr(0, pos);
+		strings.push_back(token);
+	}
+
+	Validator val;
+	try {
+		val.changeGradeValidator(strings);
+
+		int ID = stoi(strings[0]);
+		int newGrade = stoi(strings[1]);
+
+		if (this->controllerEmployee.changeGrade(ID, newGrade, this->userGrade))
+			std::cout << '\n' << "Change successful!" << '\n';
+		else
+			std::cout << '\n' << "User not found/Employee grade > user Grade" << '\n';
+	}
+	catch (MyExceptions exc) {
+		std::cout << exc.getMessage() << '\n';
+	}
+}
+
+void UI::users() {
+	for (int i = 0; i < this->usersStorage.size(); i++)
+		std::cout << usersStorage[i] << '\n';
 }
 
 void UI::employeeMenu() {
@@ -265,7 +381,16 @@ void UI::menu() {
 			this->employeeMenu();
 		if (cmd.find("drugs") != std::string::npos)
 			this->drugsMenu();
-		if (cmd.find("exit") != std::string::npos)
-			exit = true;
+		if (cmd.find("find") != std::string::npos)
+			this->find(cmd);
+		if (cmd.find("change") != std::string::npos)
+			this->change(cmd);
+		if (cmd.find("users") != std::string::npos)
+			this->users();
+		if (cmd.find("logout") != std::string::npos) {
+			this->loginPhase();
+			break;
+		}
+			
 	}
 }
