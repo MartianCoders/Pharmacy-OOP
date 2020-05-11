@@ -1,5 +1,7 @@
 #include "ControllerDrug.h"
 
+#include <algorithm>
+
 ControllerDrug::ControllerDrug() {}
 
 ControllerDrug::ControllerDrug(const RepositoryDrug& repo) {
@@ -40,4 +42,16 @@ std::vector<Drug> ControllerDrug::getAll() {
 
 int ControllerDrug::getSize() {
 	return this->storageDrug.getSize();
+}
+
+std::vector<Drug> ControllerDrug::findDrug(std::string drug) {
+	std::vector<Drug> storageDrugs = this->storageDrug.getAll();
+	std::vector<Drug> result;
+	for (int i = 0; i < storageDrugs.size(); i++) {
+		std::string name = storageDrugs[i].getName();
+		std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+		if (name.find(drug) != std::string::npos)
+			result.push_back(storageDrugs[i]);
+	}
+	return result;
 }
