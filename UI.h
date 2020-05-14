@@ -14,9 +14,12 @@ public:
 	UI(const ControllerDrug&, const ControllerEmployee&);
 	~UI();
 
-	/* Menu's*/
-	void loginPhase();
+	/* Login */
+	void showLogin();
+	void login(std::string, std::string);
 	bool checkData(std::string, std::string);
+
+	/* Menu's*/
 	void menu();
 	void showMenu();
 	void showEmployeeMenu();

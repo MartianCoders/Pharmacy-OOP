@@ -4,7 +4,7 @@
 #include <filesystem>
 namespace fs = std::filesystem;
 
-std::vector<std::string> Validator::employeeValidator(std::vector<std::string> strings) throw (MyExceptions)
+bool Validator::employeeValidator(std::vector<std::string> strings) throw (MyExceptions)
 {
 	if (strings[0].empty())
 		throw MyExceptions("Empty ID");
@@ -34,7 +34,7 @@ std::vector<std::string> Validator::employeeValidator(std::vector<std::string> s
 			throw MyExceptions("Grade needs to be a number");
 	}
 
-	return std::vector<std::string>();
+	return false;
 }
 
 std::vector<std::string> Validator::drugsValidator(std::vector<std::string> strings) throw(MyExceptions)

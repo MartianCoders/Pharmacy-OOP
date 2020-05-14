@@ -22,4 +22,5 @@ public:
 
 	/* Operations */
 	bool changeGrade(int, int, int);
+	Employee checkDataLogin(std::string, std::string);
 };

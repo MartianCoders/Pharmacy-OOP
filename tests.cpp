@@ -9,6 +9,7 @@
 #include "RepositoryEmployee.h"
 #include "ControllerDrug.h"
 #include "ControllerEmployee.h"
+#include "UI.h"
 
 void test_employee() {
 	Employee e;
@@ -29,7 +30,7 @@ void test_employee() {
 	assert(string.str() == "2 Andrei andrei@gmail.com 2");
 }
 
-void test_drug() {
+void test_Drug() {
 	Drug d;
 	Drug dd(d);
 	Drug d1(1, "Paracetamol", false, 50, "RoFarm");
@@ -83,7 +84,7 @@ void test_contDrug() {
 	assert(controllerDrug.getAll()[0] == d2);
 	
 	std::string drug = "nuro";
-	std::vector<Drug> result = controllerDrug.findDrug(drug);
+	std::vector<Drug> result = controllerDrug.search(drug);
 	for (int i = 0; i < result.size(); i++)
 		assert(result[i].getName() == "Nurofen");
 	controllerDrug.dell(1);
@@ -108,11 +109,55 @@ void test_contEmployee() {
 	assert(controllerEmployee.getSize() == 0);
 }
 
+void test_login() {
+	RepositoryEmployee testStorageEmpl("tests.txt");
+	RepositoryDrug testStorageDrug("tests.txt");
+	ControllerDrug contrDrug(testStorageDrug);
+	ControllerEmployee contrEmp(testStorageEmpl);
+	UI ui(contrDrug, contrEmp);
+	Employee e1(1, "Teodor", "info.teodor@gmail.com", 10);
+	Employee e2(0, "", "", 0);
+	contrEmp.add(1, "Teodor", "info.teodor@gmail.com", 10);
+	assert(contrEmp.checkDataLogin("info.teodor@gmail.com", "info.teodor") == e1);
+	assert(contrEmp.checkDataLogin("info.teodor@gmail.com", "da") == e2);
+	contrEmp.dell(1);
+}
+
+void test_lab() {
+	RepositoryDrug repoDrug;
+	ControllerDrug service(repoDrug);
+	Drug m1(100, "parasinus", false, 10, "p1");
+	Drug m2(200, "ketonal", false, 90, "p2");
+	Drug m3(300, "antibiotic", true, 70, "p3");
+
+	//service.add(m1);
+	//service.add(m2);
+	assert(service.getAll().size() == 2);
+	assert(service.getAll()[0] == m1);
+	assert(service.getAll()[1] == m2);
+	//service.add(m3);
+	assert(service.getAll()[2] == m3);
+
+	assert(service.search("ic").size() == 1);
+	assert(service.search("a").size() == 3);
+
+	Drug m1_new(100, "altceva", false, 50, "p1");
+	//service.update(m1, m1_new);
+	assert(service.search("al").size() == 2);
+	assert(service.search("al")[0] == m1_new);
+	assert(service.search("al")[1] == m2);
+	service.dell(200);
+	assert(service.search("al").size() == 1);
+	assert(service.search("al")[0] == m1_new);
+}
+
 void test_all() {
 	test_employee();
-	test_drug();
+	test_Drug();
 	test_repoDrug();
 	test_repoEmployee();
 	test_contDrug();
 	test_contEmployee();
+	test_login();
+	//test_lab();
 }

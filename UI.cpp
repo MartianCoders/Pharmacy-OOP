@@ -51,7 +51,7 @@ void UI::showDrugsMenu() {
 	std::cout << "--------------------------" << '\n';
 }
 
-void UI::loginPhase() {
+void UI::showLogin() {
 	std::cout << "============================" << '\n';
 	std::cout << "User: ";
 	std::string userToCheck;
@@ -61,37 +61,22 @@ void UI::loginPhase() {
 		std::string passwordToCheck;
 		std::getline(std::cin, passwordToCheck);
 		std::cout << "============================";
-
-		if (this->checkData(userToCheck, passwordToCheck)) {
-			std::cout << '\n' << "Login successful!" << '\n' << '\n';
-			this->user = userToCheck;
-			this->menu();
-		}
-		else {
-			std::cout << '\n' << "Wrong data input!" << '\n';
-			this->loginPhase();
-		}
+		this->login(userToCheck, passwordToCheck);
 	}
 }
 
-bool UI::checkData(std::string user, std::string pass) {
-	std::vector<Employee> storageEmployee = this->controllerEmployee.getAll();
-	std::string token;
-	std::string sep = "@";
-
-
-	for (int i = 0; i < storageEmployee.size(); i++)
-		if (storageEmployee[i].getEmail() == user) {
-			size_t pos = user.find(sep);
-			token = user.substr(0, pos);
-			user = token;
-			if (user == pass) {
-				this->userGrade = storageEmployee[i].getGrade();
-				this->usersStorage.push_back(storageEmployee[i]);
-				return true;
-			}
-		}
-	return false;
+void UI::login(std::string userToCheck, std::string passwordToCheck) {
+	Employee e1 = this->controllerEmployee.checkDataLogin(userToCheck, passwordToCheck);
+	if (e1 != Employee(0, "", "", 0)) {
+		std::cout << '\n' << "Login successful!" << '\n' << '\n';
+		this->userGrade = e1.getGrade();
+		this->usersStorage.push_back(e1);
+		this->menu();
+	}
+	else {
+		std::cout << '\n' << "Wrong data input!" << '\n';
+		this->showLogin();
+	}
 }
 
 void UI::showAllE() {
@@ -219,7 +204,7 @@ void UI::updateD(std::string cmd) {
 			recipe = true;
 		int stock = stoi(strings[3]);
 
-		this->controllerDrugs.update(ID, strings[1], recipe, stock, strings[4]);
+		//this->ControllerDrugs.update(ID, strings[1], recipe, stock, strings[4]);
 	}
 	catch (MyExceptions exc) {
 		std::cout << exc.getMessage() << '\n';
@@ -281,7 +266,7 @@ void UI::find(std::string cmd) {
 	try {
 		val.drugSearchValidator(token);
 
-		std::vector<Drug> result = this->controllerDrugs.findDrug(token);
+		std::vector<Drug> result = this->controllerDrugs.search(token);
 		for (int i = 0; i < result.size(); i++)
 			std::cout << result[i] << '\n';
 	}
@@ -388,7 +373,7 @@ void UI::menu() {
 		if (cmd.find("users") != std::string::npos)
 			this->users();
 		if (cmd.find("logout") != std::string::npos) {
-			this->loginPhase();
+			this->showLogin();
 			break;
 		}
 			

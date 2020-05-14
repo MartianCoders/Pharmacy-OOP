@@ -44,9 +44,10 @@ int main() {
 		ControllerEmployee controllerEmployee(storageEmployee);
 
 		UI ui(controllerDrug, controllerEmployee);
-		ui.loginPhase();
+		ui.showLogin();
 	}
 	else
 		std::cout << "Wrong file input, retryx";
+		
 	_CrtDumpMemoryLeaks();
 }

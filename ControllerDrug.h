@@ -21,5 +21,5 @@ public:
 	std::string getFile();
 
 	/* Operations */
-	std::vector<Drug> findDrug(std::string);
+	std::vector<Drug> search(std::string);
 };

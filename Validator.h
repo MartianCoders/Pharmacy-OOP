@@ -8,7 +8,7 @@
 
 class Validator {
 public:
-	std::vector<std::string> employeeValidator(std::vector<std::string>);
+	bool employeeValidator(std::vector<std::string>);
 	std::vector<std::string> drugsValidator(std::vector<std::string>);
 	std::string deleteValidator(std::string);
 

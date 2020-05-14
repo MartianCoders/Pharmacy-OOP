@@ -12,4 +12,8 @@ void test_contDrug(); // Test Drug Controler
 
 void test_contEmployee(); // Test Employee Controler
 
+void test_login();
+
+void test_lab();
+
 void test_all(); // Execute all tests

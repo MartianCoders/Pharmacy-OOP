@@ -54,3 +54,21 @@ bool ControllerEmployee::changeGrade(int ID, int newGrade, int userGrade) {
 		}
 	return false;
 }
+
+Employee ControllerEmployee::checkDataLogin(std::string user, std::string pass)
+{
+	std::vector<Employee> storageEmployee = this->storageEmployee.getAll();
+	std::string token;
+	std::string sep = "@";
+
+	for (int i = 0; i < storageEmployee.size(); i++)
+		if (storageEmployee[i].getEmail() == user) {
+			size_t pos = user.find(sep);
+			token = user.substr(0, pos);
+			user = token;
+			if (user == pass) {
+				return storageEmployee[i];
+			}
+		}	
+	return Employee();
+}

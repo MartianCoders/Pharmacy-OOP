@@ -44,7 +44,7 @@ int ControllerDrug::getSize() {
 	return this->storageDrug.getSize();
 }
 
-std::vector<Drug> ControllerDrug::findDrug(std::string drug) {
+std::vector<Drug> ControllerDrug::search(std::string drug) {
 	std::vector<Drug> storageDrugs = this->storageDrug.getAll();
 	std::vector<Drug> result;
 	for (int i = 0; i < storageDrugs.size(); i++) {
